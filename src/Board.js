@@ -79,12 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var row = this.get(rowIndex);
+      var sum = row.reduce (function(a,b){
+        return a + b;
+      });
+      if (sum > 1){
+        return true;
+      } else {
+        return false; // fixme
+      }
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      for (var i = 0; i < rows.length; i++){
+        if(this.hasRowConflictAt(i)){
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -94,11 +108,34 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      var rows = this.rows();
+      var col = [];
+      for (let i = 0; i < rows.length; i++){
+        col.push(rows[i][colIndex]);
+      }
+      if(col.reduce((a,b) => a + b) > 1){
+        return true;
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      var rows = this.rows();
+      var columns = [];
+      for (let i = 0; i < rows.length; i++){
+        var singleColumn = [];
+        for (let j = 0; j < rows.length; j++){
+          singleColumn.push(rows[j][i]);
+        }
+        columns.push(singleColumn);
+      }
+
+      for(let i = 0; i < columns.length; i++){
+        if(columns[i].reduce((a,b) => a + b) > 1){
+          return true;
+        }
+      }
       return false; // fixme
     },
 
@@ -109,11 +146,38 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+
+
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var rows = this.rows();
+      var majorDiagonals = [];
+      for (let x = 0; x < rows.length; x++){
+        var currentIteration = [];
+        for (let y = 0; y < rows.length - x; y++){
+          currentIteration.push(rows[y][y + x]);
+        }
+        majorDiagonals.push(currentIteration);
+      };
+
+      var majorDiagonalColumns = []
+      for(let y = 1; y < rows.length; y++){
+        var currentIteration = []
+        for (let x = 0; x < rows.length - y; x++){
+          currentIteration.push(rows[y + x][x]);
+        }
+        majorDiagonalColumns.push(currentIteration);
+      }
+      majorDiagonals = majorDiagonals.concat(majorDiagonalColumns);
+
+      for (let i = 0; i < majorDiagonals.length; i++){
+        if (majorDiagonals[i].reduce((a, b) => (a + b)) > 1){
+          return true;
+        }
+      }
       return false; // fixme
     },
 
@@ -129,7 +193,42 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var rows = this.rows();
+      var columns = [];
+      for (let i = rows.length -1 ; i > -1; i--) {
+        var singleColumn = [];
+        for (let j = 0; j < rows.length; j++) {
+          singleColumn.push(rows[i][j]);
+        }
+        columns.push(singleColumn);
+      }
+      rows = columns;
+
+      var minorDiagonals = [];
+      for (let x = 0; x < rows.length; x++){
+        var currentIteration = [];
+        for (let y = 0; y < rows.length - x; y++){
+          currentIteration.push(rows[y][y + x]);
+        }
+        minorDiagonals.push(currentIteration);
+      };
+
+      var minorDiagonalColumns = []
+      for(let y = 1; y < rows.length; y++){
+        var currentIteration = []
+        for (let x = 0; x < rows.length - y; x++){
+          currentIteration.push(rows[y + x][x]);
+        }
+        minorDiagonalColumns.push(currentIteration);
+      }
+      minorDiagonals = minorDiagonals.concat(minorDiagonalColumns);
+
+      for (let i = 0; i < minorDiagonals.length; i++){
+        if (minorDiagonals[i].reduce((a, b) => (a + b)) > 1){
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
