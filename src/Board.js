@@ -190,6 +190,19 @@
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
       return false; // fixme
     },
+    
+    hasCorrectNumberOfQueens: function() {
+      var rows = this.rows();
+      var sum = 0
+      for (let i = 0; i < rows.length; i++){
+        sum += rows[i].reduce((a, b) => a + b);
+      }
+      if (sum === this.attributes.n){
+        return true;
+      } else {
+        return false;
+      }
+    },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
